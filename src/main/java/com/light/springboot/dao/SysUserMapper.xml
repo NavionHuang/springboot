@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.light.springboot.dao.SysUserMapper">
+	<select id="queryByName" parameterType="string" resultMap="map">
+		SELECT
+		role.id AS roleid,
+		role. NAME,
+		USER .id AS userid,
+		USER .username,
+		USER . PASSWORD
+		FROM
+		sys_user AS USER,
+		sys_role AS role
+		WHERE
+		USER
+		.username = #{username}
+		AND role.id = (
+		SELECT
+		roles_id
+		FROM
+		sys_user_roles
+		WHERE
+		sys_user_id = USER .id
+		)
+	</select>
+	<resultMap type="SysUser" id="map">
+		<result column="userid" property="id" />
+		<result column="username" property="username" />
+		<result column="PASSWORD" property="password" />
+		<association property="roles" javaType="SysRole" >
+			<result column="roleid"  property="id" />
+			<result column="NAME" property="name" />
+		</association>
+	</resultMap>
+</mapper>
